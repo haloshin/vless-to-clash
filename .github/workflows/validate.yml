@@ -1,0 +1,41 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Compile converter
+        run: python3 -m py_compile scripts/vless_to_clash.py
+
+      - name: Run example conversion
+        run: |
+          python3 scripts/vless_to_clash.py \
+            --input "vless://UUID@example.com:443?security=reality&sni=www.example.com&fp=chrome&pbk=PUBLIC_KEY&sid=SHORT_ID&type=tcp&flow=xtls-rprx-vision#Example-US" \
+            --output-dir /tmp/vless-to-clash-check \
+            --basename example-us \
+            --mode both \
+            --direct-ip 203.0.113.10 \
+            --no-qr
+          test -f /tmp/vless-to-clash-check/example-us-global.yaml
+          test -f /tmp/vless-to-clash-check/example-us-rule.yaml
+          test -f /tmp/vless-to-clash-check/example-us-USAGE.md
+
+      - name: Check generated content
+        run: |
+          grep -q "Example-US" /tmp/vless-to-clash-check/example-us-global.yaml
+          grep -q "RULE-SET,cn-sites,DIRECT" /tmp/vless-to-clash-check/example-us-rule.yaml
+          grep -q "MATCH,PROXY" /tmp/vless-to-clash-check/example-us-rule.yaml
