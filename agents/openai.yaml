@@ -1,0 +1,4 @@
+interface:
+  display_name: "VLESS to Clash"
+  short_description: "Convert VLESS links to Clash YAML and QR codes"
+  default_prompt: "把这个 vless:// 链接转成 Clash 全局版和规则版，并生成订阅二维码和使用说明。"
