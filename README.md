@@ -1,5 +1,7 @@
 # vless-to-clash
 
+[English](README.md) | [中文](README.zh-CN.md)
+
 Codex/Claude skill for converting `vless://` links into Clash/Mihomo configs, rule-based configs, subscription-ready files, and QR codes.
 
 It is designed for VLESS + Reality + TCP + Vision links commonly exported by v2rayN, Shadowrocket, and 3X-UI.
