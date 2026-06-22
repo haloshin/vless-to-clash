@@ -56,7 +56,6 @@ def first(query: Dict[str, List[str]], key: str, default: str = "") -> str:
 
 def slugify(text: str) -> str:
     text = unquote(text).strip()
-    text = re.sub(r"^THX-", "", text)
     text = re.sub(r"[^A-Za-z0-9._-]+", "-", text)
     text = re.sub(r"-+", "-", text).strip("-")
     return text or "vless-node"

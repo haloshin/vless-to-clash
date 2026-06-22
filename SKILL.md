@@ -1,6 +1,6 @@
 ---
 name: vless-to-clash
-description: Convert vless:// proxy links, especially VLESS + Reality + TCP + Vision links from v2rayN/Shadowrocket/3X-UI, into Clash/Mihomo global YAML, rule-based YAML, subscription-ready files, QR codes, and user-facing import instructions. Use this skill whenever the user asks to turn VLESS links into Clash, Clash Verge, Mihomo, subscription links, YAML configs, QR codes, global mode configs, rule mode configs, or employee-ready proxy distribution files.
+description: Convert vless:// proxy links, especially VLESS + Reality + TCP + Vision links from v2rayN/Shadowrocket/3X-UI, into Clash/Mihomo global YAML, rule-based YAML, subscription-ready files, QR codes, and user-facing import instructions. Use this skill whenever the user asks to turn VLESS links into Clash, Clash Verge, Mihomo, subscription links, YAML configs, QR codes, global mode configs, rule mode configs, or team-ready proxy distribution files.
 ---
 
 # VLESS To Clash
@@ -19,7 +19,7 @@ Use this skill to turn one or more `vless://` links into clean Clash/Mihomo arti
    - desired node name, if the link fragment is unclear
    - output folder, if the user wants files somewhere specific
    - public subscription base URL, if they want actual online subscription links
-   - direct IPs, if company/VPS IPs should bypass proxy in rule mode
+   - direct IPs, if trusted server IPs should bypass proxy in rule mode
 3. Run `scripts/vless_to_clash.py`.
 4. Validate the generated YAML by parsing it or at least checking the expected node names and rules.
 5. Explain outputs plainly:
@@ -33,7 +33,7 @@ Use this skill to turn one or more `vless://` links into clean Clash/Mihomo arti
 Use the bundled script for deterministic conversion:
 
 ```bash
-python3 /Users/shin/.claude/skills/vless-to-clash/scripts/vless_to_clash.py \
+python3 scripts/vless_to_clash.py \
   --input "vless://..." \
   --output-dir /path/to/output \
   --basename app \
@@ -119,10 +119,10 @@ rules:
 
 ## Rule YAML Shape
 
-Use rule mode for employee/daily use:
+Use rule mode for daily use:
 
 ```text
-LAN/private/company IPs -> DIRECT
+LAN/private/trusted server IPs -> DIRECT
 NTP -> DIRECT
 ads -> REJECT
 China domains/IPs -> DIRECT
@@ -139,16 +139,16 @@ geoip/cn.yaml
 geosite/geolocation-!cn.yaml
 ```
 
-Place direct IP rules before LAN rules. For company proxy servers, add their IPs with `--direct-ip` so clients do not proxy back into the origin server.
+Place direct IP rules before LAN rules. For trusted proxy or subscription servers, add their IPs with `--direct-ip` so clients do not proxy back into the origin server.
 
-## THX Distribution Guidance
+## Team Distribution Guidance
 
-When converting for company proxy distribution:
+When converting for team or organization proxy distribution:
 
-- Keep ordinary department links separate from Sensitive links.
-- Do not add `US-Sensitive` to ordinary department rule subscriptions unless the user explicitly asks.
-- During testing, suffix node names with `-Rule`, such as `THX-🇺🇸 US-APP-Rule`.
-- For final employee distribution, prefer clean department names without `-Rule`, and explain that the subscription already contains rules.
+- Keep different audience or permission groups in separate subscription files.
+- Do not mix restricted nodes into ordinary subscriptions unless the user explicitly asks and has permission to distribute them.
+- During testing, suffix node names with `-Rule`, such as `ACME-US-APP-Rule`.
+- For final team distribution, prefer clean names without temporary testing suffixes, and explain that the subscription already contains rules.
 - Provide both global and rule artifacts, but recommend rule mode for daily use.
 
 ## Output Explanation Template
